@@ -1,4 +1,5 @@
 require 'rubygems'
+gem 'rspec'
 require 'rspec/core'
 
 class RSpecRunnerWithArgsFix <  RSpec::Core::Runner
