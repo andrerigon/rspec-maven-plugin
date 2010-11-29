@@ -21,6 +21,7 @@ import org.jruby.runtime.builtin.IRubyObject;
  * @author Diego Carrion
  * @author Andre Goncalves
  * @goal spec
+ * 
  */
 public final class RspecRunnerMojo extends AbstractRspecMojo {
 
@@ -40,7 +41,9 @@ public final class RspecRunnerMojo extends AbstractRspecMojo {
 			return false;
 		}
 		if (!sourceDirectoryExists()) {
-			getLog().error(String.format("source directory %s does not exists!", sourceDirectory));
+			getLog().error(
+					String.format("source directory %s does not exists!",
+							sourceDirectory));
 			return false;
 		}
 		validateRubyHome();
@@ -49,13 +52,15 @@ public final class RspecRunnerMojo extends AbstractRspecMojo {
 
 	private void processResults(boolean result) throws MojoFailureException {
 		if (!result) {
-			String msg = "RSpec tests failed. See '" + reportFile() + "' for details.";
+			String msg = "RSpec tests failed. See '" + reportFile()
+					+ "' for details.";
 			getLog().warn(msg);
 			if (!ignoreFailure) {
 				throw new MojoFailureException(msg);
 			}
 		} else {
-			String msg = "RSpec tests successful. See '" + reportFile() + "' for details.";
+			String msg = "RSpec tests successful. See '" + reportFile()
+					+ "' for details.";
 			getLog().info(msg);
 		}
 	}
@@ -64,8 +69,9 @@ public final class RspecRunnerMojo extends AbstractRspecMojo {
 		getLog().info("Running RSpec tests from " + sourceDirectory);
 		RubyRuntimeAdapter evaler = JavaEmbedUtils.newRuntimeAdapter();
 		IRubyObject o = evaler.eval(runtime, script.toString());
-		boolean result = ((RubyBoolean) JavaEmbedUtils.invokeMethod(runtime, o, "run", new Object[] { sourceDirectory,
-				reportFile() }, (Class<?>) RubyBoolean.class)).isTrue();
+		boolean result = ((RubyBoolean) JavaEmbedUtils.invokeMethod(runtime, o,
+				"run", new Object[] { sourceDirectory, reportFile() },
+				(Class<?>) RubyBoolean.class)).isTrue();
 		return result;
 	}
 
@@ -101,16 +107,19 @@ public final class RspecRunnerMojo extends AbstractRspecMojo {
 
 	private void validateRubyHome() throws MojoExecutionException {
 		if (jrubyHome == null) {
-			throw new MojoExecutionException("$JRUBY_HOME or jrubyHome directory not specified");
+			throw new MojoExecutionException(
+					"$JRUBY_HOME or jrubyHome directory not specified");
 		}
 	}
 
 	private String loadRubyScript() {
-		return new Scanner(Thread.currentThread().getContextClassLoader().getResourceAsStream("RSpecRunner.rb"))
-				.useDelimiter("\\Z").next();
+		return new Scanner(Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("RSpecRunner.rb")).useDelimiter("\\Z")
+				.next();
 	}
 
-	private String handleClasspathElements(Ruby runtime) throws MalformedURLException {
+	private String handleClasspathElements(Ruby runtime)
+			throws MalformedURLException {
 		StringBuilder script = new StringBuilder();
 		for (String path : classpathElements) {
 			if (path.endsWith(".jar")) {
@@ -119,10 +128,10 @@ public final class RspecRunnerMojo extends AbstractRspecMojo {
 			} else {
 				// handling directories
 				getLog().info("Adding to Ruby Class Loader: " + path);
-				runtime.getJRubyClassLoader().addURL(new URL("file:" + path + "/"));
+				runtime.getJRubyClassLoader().addURL(
+						new URL("file:" + path + "/"));
 			}
 		}
 		return script.toString();
 	}
-
 }

@@ -7,7 +7,7 @@ import org.apache.maven.plugin.AbstractMojo;
 /**
  * Just holds mojo properties to make Mojo real code cleaner
  * 
- * @author andre
+ * @author Andre Goncalves
  * 
  */
 public abstract class AbstractRspecMojo extends AbstractMojo {
